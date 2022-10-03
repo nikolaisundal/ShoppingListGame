@@ -72,7 +72,8 @@ form button:hover {
 }
 
 .trash-btn,
-.complete-btn {
+.complete-btn,
+.hint-btn {
     background: #d88771;
     color: white;
     border: none;
@@ -81,22 +82,29 @@ form button:hover {
     font-size: 1rem;
 }
 
+.hint-btn {
+    background: #e2c35d;
+}
+
 .complete-btn  {
     background: #94dc86;
 }
 
 .todo-item {
     padding: 0rem 0.5rem;
+    /* display: flex;
+    flex-wrap: nowrap; */
 }
 
 .fa-trash,
-.fa-check {
+.fa-check,
+.fa-question {
     pointer-events: none;
 }
 
 .completed {
     text-decoration: line-through;
-    opacity: 0.5;
+    text-decoration-thickness: 100%;
 }
 
 .fall {
@@ -144,3 +152,17 @@ select {
     background: white;
     color:#d88771
 }
+
+.counter {
+    display: none;
+}
+
+.secret {
+    text-decoration: line-through;
+    text-decoration-thickness: 100%;
+}
+
+.shown {
+    
+}
+
