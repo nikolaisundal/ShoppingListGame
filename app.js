@@ -2,6 +2,7 @@
 //selectors
 const todoInput = document.querySelector('.todo-input');
 const todoButton = document.querySelector('.todo-button');
+const checkBox = document.querySelector('#showHide');
 const attemptButton = document.querySelector('.attempt-button');
 const todoList = document.querySelector('.todo-list');
 const filterOption = document.querySelector(".filter-todo");
@@ -9,47 +10,148 @@ const li = document.getElementsByTagName('li');
 
 //array
 
-const todoArray = [];
+/* const todoArray = []; */
 
 //Event Listeners
+document.addEventListener('DOMContentLoaded', getTodos)
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener("click", deleteCheck);
 todoList.addEventListener("click", hint);
-filterOption.addEventListener("click", filterTodo);
+/* filterOption.addEventListener("click", filterTodo); */
 attemptButton.addEventListener('click', attempt);
+checkBox.addEventListener('change', showHide);
 
 //Functions
 
+
+
+function showHide() {
+    let todoArray;
+    if(localStorage.getItem('todoArray') === null) {
+        todoArray = [];
+    } else {
+        todoArray = JSON.parse(localStorage.getItem('todoArray'))
+    }
+    const ul = document.querySelectorAll('ul li');
+    if (ul.length === 0 || checkBox.checked) {
+        localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
+    }
+    for (let i = 0; i <= ul.length - 1; i++) {
+        ul[i].parentElement.remove()
+    }
+    todoArray.forEach(function (todo) {
+        const todoDiv = document.createElement("div");
+        todoDiv.classList.add('todo');
+        //Create li
+        const newTodo = document.createElement('li');
+        const shownSpan = document.createElement('span');
+        shownSpan.classList.add('shown');
+        const hiddenSpan = document.createElement('span');
+        hiddenSpan.classList.add('secret');
+        newTodo.classList.add('todo-item');
+        if (checkBox.checked) {
+            console.log("heiho")
+            localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
+            shownSpan.innerText = todo.item.substring(0, todo.count);
+            newTodo.appendChild(shownSpan); 
+            hiddenSpan.innerText = todo.item.substring(todo.count);
+            newTodo.appendChild(hiddenSpan);
+            todoDiv.appendChild(newTodo);
+        } else {
+            /* localStorage.removeItem("checkbox"); */localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
+            shownSpan.innerText = todo.item;
+            newTodo.appendChild(shownSpan); 
+            newTodo.appendChild(hiddenSpan);
+            todoDiv.appendChild(newTodo);
+        }
+        //Check mark button
+        const completedButton = document.createElement('button');
+        completedButton.innerHTML = '<i class="fas fa-check"><i>'; 
+        completedButton.classList.add("complete-btn");
+        todoDiv.appendChild(completedButton);
+        //Trash button
+        const trashButton = document.createElement('button');
+        trashButton.innerHTML = '<i class="fas fa-trash"><i>';
+        trashButton.classList.add("trash-btn");
+        todoDiv.appendChild(trashButton);
+        //Hintbutton
+        const hintButton = document.createElement('button');
+        hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
+        hintButton.classList.add("hint-btn");
+        todoDiv.appendChild(hintButton);
+        //Append todoDiv to list
+        todoList.appendChild(todoDiv);
+    })
+    localStorage.setItem('todoArray', JSON.stringify(todoArray));
+}
+        
 function attempt(event) {
     event.preventDefault();
+    let todoArray;
+    if(localStorage.getItem('todoArray') === null) {
+        todoArray = [];
+    } else {
+        todoArray = JSON.parse(localStorage.getItem('todoArray'))
+    }
     for (let i = 0; i < todoArray.length; i++) {
-        if (todoInput.value === todoArray[i]) {
+        if (todoInput.value === todoArray[i].item) {
             const items = todoList.getElementsByTagName("li");
             for ( let j = 0; j < items.length; j++) {
-                const secretInnerChild = items[j].children[1].innerText;
                 const shownInnerChild = items[j].children[0].innerText;
+                const secretInnerChild = items[j].children[1].innerText;
                 const concat = shownInnerChild.concat(secretInnerChild);
-                if (concat === todoArray[i]) {
+                if (concat === todoArray[i].item) {
                     items[j].innerHTML = 
-                    `<span class="shown">${todoArray[i]}</span>`+
+                    `<span class="shown">${todoArray[i].item}</span>`+
                     `<span class="secret">${""}</span>`;
                     const theFirstChild = todoList.firstChild; 
                     const correct = items[j].parentElement;
                     todoList.insertBefore(correct, theFirstChild);
-
+                    //change count so it works with show/hide
+                    const itemToMove = 
+                    {item: todoArray[i].item,
+                    count: todoArray[i].item.length};
+                    todoArray.splice(i ,1);
+                    todoArray.unshift(itemToMove);
+                    alert("CongratuWellDone!")
                 } 
             }
         } 
-    }  todoInput.value = "";
+    }  
+    localStorage.setItem('todoArray', JSON.stringify(todoArray));
+    todoInput.value = "";
 }
+
+
+
+
 
 //funker ikke med arrow function her;]
 function addTodo(event) {
     //Prevent form from submitting
     event.preventDefault();
-    console.log(todoArray)
+    let todoArray;
+    if(localStorage.getItem('todoArray') === null) {
+        todoArray = [];
+    } else {
+        todoArray = JSON.parse(localStorage.getItem('todoArray'))
+    }
+    let alreadyExists
+    todoArray.forEach(function(todo) {
+        if (todo.item === todoInput.value) {
+            alert("item already exists!"); 
+            alreadyExists = true
+        }
+    })
+    if (alreadyExists === true) {
+        return;
+    }
     //push to array
-    todoArray.push(todoInput.value)
+    const todoItem = {
+        item: todoInput.value,
+        count: 0
+    }
+    saveLocalTodos(todoItem);
     //Todo div
     const todoDiv = document.createElement("div");
     todoDiv.classList.add('todo');
@@ -57,16 +159,16 @@ function addTodo(event) {
     const newTodo = document.createElement('li');
     const shownSpan = document.createElement('span');
     shownSpan.classList.add('shown')
-    newTodo.appendChild(shownSpan);
+    shownSpan.innerText = todoInput.value;
+    newTodo.appendChild(shownSpan); 
     const hiddenSpan = document.createElement('span');
     hiddenSpan.classList.add('secret')
-    hiddenSpan.innerText = todoInput.value; 
     newTodo.appendChild(hiddenSpan);
     newTodo.classList.add('todo-item');
     todoDiv.appendChild(newTodo);
     //Check mark button
     const completedButton = document.createElement('button');
-    completedButton.innerHTML = '<i class="fas fa-check"><i>';
+    completedButton.innerHTML ='<i class="fas fa-check"><i>';
     completedButton.classList.add("complete-btn");
     todoDiv.appendChild(completedButton);
     //Trash button
@@ -79,33 +181,37 @@ function addTodo(event) {
     hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
     hintButton.classList.add("hint-btn");
     todoDiv.appendChild(hintButton);
-    //Stupid Counter
-    const counter=document.createElement('p');
-    counter.innerHTML='0'
-    counter.classList.add("counter");
-    todoDiv.appendChild(counter);
-    //Append todoDiv til list
+    //Append todoDiv to list
     todoList.appendChild(todoDiv);
     //clear todoinput value
     todoInput.value = "";
     }
-
+    
 function deleteCheck(e){
+    let todoArray;
+    if(localStorage.getItem('todoArray') === null) {
+        todoArray = [];
+    } else {
+        todoArray = JSON.parse(localStorage.getItem('todoArray'))
+    }
     const item = e.target;
     //delete todo
     if (item.classList[0] === "trash-btn") {
         const todo = item.parentElement;
         //remove from array
-        const secretInnerChild = todo.getElementsByTagName('li')[0].children[1].innerText;
         const shownInnerChild = todo.getElementsByTagName('li')[0].children[0].innerText;
+        const secretInnerChild = todo.getElementsByTagName('li')[0].children[1].innerText;
         const concat = shownInnerChild.concat(secretInnerChild);
+
         for (let i = 0; i < todoArray.length; i++) {
-            if (concat.replaceAll(" ", "") === todoArray[i].replaceAll(" ", "")) { 
+            if (concat.replaceAll(" ", "") === todoArray[i].item.replaceAll(" ", "")) { 
                 todoArray.splice(i, 1);
             }
         }
         //Animation
         todo.classList.add("fall");
+        //remove from local storage
+        
         todo.addEventListener("transitionend", function(){
             todo.remove();
         })
@@ -115,6 +221,7 @@ function deleteCheck(e){
         const todo = item.parentElement;
         todo.classList.toggle("completed")
     }
+    localStorage.setItem('todoArray', JSON.stringify(todoArray));
 }
 
 
@@ -122,29 +229,104 @@ function deleteCheck(e){
 
 
 function hint(e){
+    let todoArray;
+    if(localStorage.getItem('todoArray') === null) {
+        todoArray = [];
+    } else {
+        todoArray = JSON.parse(localStorage.getItem('todoArray'))
+    }
     const item = e.target;
     if (item.classList[0] === "hint-btn") {
         const todo = item.parentElement;
-        const counter = todo.querySelector(".counter");
-        counter.innerText = `${(Number(counter.innerHTML))+1}`;
-        const secretInnerChild = todo.getElementsByTagName('li')[0].children[1].innerText;
+        if(todo.getElementsByTagName('li')[0].classList[1] === "completed"){
+            console.log("hei")
+            todo.getElementsByTagName('li')[0].classList.remove("completed")
+        }
         const shownInnerChild = todo.getElementsByTagName('li')[0].children[0].innerText;
+        const secretInnerChild = todo.getElementsByTagName('li')[0].children[1].innerText;
         const concat = shownInnerChild.concat(secretInnerChild);
         for (let i = 0; i < todoArray.length; i++) {
-            if (concat.replaceAll(" ", "") === todoArray[i].replaceAll(" ", "")) {
-                const shownText = `<span class="shown">${todoArray[i].substring(0, Number(counter.innerText))}</span>`;
-                const hiddenText =`<span class="secret">${todoArray[i].substring(Number(counter.innerText))}</span>`;
+            if (concat.replaceAll(" ", "") === todoArray[i].item.replaceAll(" ", "")) {
+                todoArray[i].count += 1;
+                const shownText = `<span class="shown">${todoArray[i].item.substring(0, todoArray[i].count)}</span>`;
+                const hiddenText =`<span class="secret">${todoArray[i].item.substring(todoArray[i].count)}</span>`;
                 todo.getElementsByTagName('li')[0].innerHTML = shownText + hiddenText;
-
-                }  
+            }  
         } 
-    }    
+    } 
+    localStorage.setItem('todoArray', JSON.stringify(todoArray));   
 } 
 
 
-function filterTodo(e) {
+/* function filterTodo(e) {
     const todos= todoList.childNodes;
     
 }
 
+ */
+
+function saveLocalTodos(todo) {
+    //check if there already is something in local storage.
+    let todoArray;
+    if(localStorage.getItem('todoArray') === null) {
+        todoArray = [];
+    } else {
+        todoArray = JSON.parse(localStorage.getItem('todoArray'))
+    }
+    todoArray.push(todo)
+    localStorage.setItem('todoArray', JSON.stringify(todoArray))
+}
+
+function getTodos() {
+    let checkBoxCheck = JSON.parse(localStorage.getItem("checkbox"));
+    if (checkBoxCheck === true) {
+        checkBox.checked = true;
+    }
+    if(localStorage.getItem('todoArray') === null) {
+        todoArray = [];
+    } else {
+        todoArray = JSON.parse(localStorage.getItem('todoArray'))
+    }
+    //todo parameter = item in todoArray
+    todoArray.forEach(function (todo) {
+        const todoDiv = document.createElement("div");
+        todoDiv.classList.add('todo');
+        //Create li
+        const newTodo = document.createElement('li');
+        const shownSpan = document.createElement('span');
+        shownSpan.classList.add('shown')
+        const hiddenSpan = document.createElement('span');
+        hiddenSpan.classList.add('secret')
+        newTodo.classList.add('todo-item');
+        if (checkBox.checked) {
+            shownSpan.innerText = todo.item.substring(0, todo.count);
+            newTodo.appendChild(shownSpan); 
+            hiddenSpan.innerText = todo.item.substring(todo.count)
+            newTodo.appendChild(hiddenSpan);
+            todoDiv.appendChild(newTodo);
+        } else {
+            shownSpan.innerText = todo.item
+            newTodo.appendChild(shownSpan); 
+            newTodo.appendChild(hiddenSpan);
+            todoDiv.appendChild(newTodo);
+        }
+        //Check mark button
+        const completedButton = document.createElement('button');
+        completedButton.innerHTML = '<i class="fas fa-check"><i>';
+        completedButton.classList.add("complete-btn");
+        todoDiv.appendChild(completedButton);
+        //Trash button
+        const trashButton = document.createElement('button');
+        trashButton.innerHTML = '<i class="fas fa-trash"><i>';
+        trashButton.classList.add("trash-btn");
+        todoDiv.appendChild(trashButton);
+        //Hintbutton
+        const hintButton = document.createElement('button');
+        hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
+        hintButton.classList.add("hint-btn");
+        todoDiv.appendChild(hintButton);
+        //Append todoDiv to list
+        todoList.appendChild(todoDiv);
+    })
+}
 

@@ -7,7 +7,8 @@
 }
 
 body {
-    background-image: linear-gradient(120deg, #e2c35d, #d88771);
+    background-image: linear-gradient(120deg, #93cdb5, #396dd4);
+    /* background-image: linear-gradient(120deg, #e2c35d, #d88771); */
     color: white;
     font-family: "poppins", sans-serif;
     min-height: 100vh;
@@ -18,13 +19,15 @@ header {
 }
 
 header, form {
-    min-height: 20vh;
+    min-height: 12vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 form input, form button {
+    border-radius: 20px;
+    margin: 2px;
     padding: 0.8rem;
     font-size: 1.2rem;
     border: none;
@@ -32,17 +35,42 @@ form input, form button {
 
 }
 
-form button {
+.todo-button {
     color: #d88771;
     background: white;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-form button:hover {
+.todo-button:hover {
     color: white;
     background: #d88771;
 }
+
+.attempt-button {
+    color:#94dc86;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.attempt-button:hover {
+    color: white;
+    background: #94dc86;
+}
+
+/* form button {
+    color: #d88771;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+} */
+
+/* form button:hover {
+    color: white;
+    background: #d88771;
+} */
+
 
 .todo-container {
     display: flex;
@@ -56,6 +84,7 @@ form button:hover {
 }
 
 .todo {
+    border-radius: 20px;
     margin: 0.5rem;
     background: white;
     color: black;
@@ -74,10 +103,12 @@ form button:hover {
 .trash-btn,
 .complete-btn,
 .hint-btn {
+    margin: 1px;
+    border-radius: 20px;
     background: #d88771;
     color: white;
     border: none;
-    padding: 1rem;
+    padding: 1.5rem;
     cursor: pointer;
     font-size: 1rem;
 }
@@ -88,6 +119,8 @@ form button:hover {
 
 .complete-btn  {
     background: #94dc86;
+   
+
 }
 
 .todo-item {
@@ -102,6 +135,7 @@ form button:hover {
     pointer-events: none;
 }
 
+
 .completed {
     text-decoration: line-through;
     text-decoration-thickness: 100%;
@@ -112,6 +146,8 @@ form button:hover {
     transform: translateY(8rem) rotateZ(20deg);
     opacity: 0;
 }
+
+
 
 /* select "button" */
 select {
@@ -162,7 +198,15 @@ select {
     text-decoration-thickness: 100%;
 }
 
-.shown {
-    
+
+.showHide {
+    cursor: pointer;
+    padding: 10px;
 }
 
+.checkBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2px;
+}
