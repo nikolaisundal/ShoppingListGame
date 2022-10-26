@@ -1,9 +1,12 @@
 
+*, *::after, *::before {
+    box-sizing: border-box;
+}
 
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+        
 }
 
 body {
@@ -14,16 +17,57 @@ body {
     min-height: 100vh;
 }
 
-header {
-    font-size: 1.5rem;
+h1 {
+    padding: 10px;
 }
 
-header, form {
-    min-height: 12vh;
+header {
+    font-size: 1.2rem;
+}
+
+header/* , form */ {
+    min-height: 10vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+
+
+ .form-container form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* position: sticky; */
+    min-height: 6vh;
+    
+    padding: 0rem 0.5rem;
+    /* border-radius: 200px; */
+    min-width: 30%;
+    
+}
+
+.form-container {
+    background: rgba(244, 246, 246, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    top: 0;
+    margin-bottom: 8px;
+    border-radius: 0rem 0rem 1rem 1rem;
+    
+    
+}
+
+
+
+
+
 
 form input, form button {
     border-radius: 20px;
@@ -59,17 +103,22 @@ form input, form button {
     background: #94dc86;
 }
 
-/* form button {
-    color: #d88771;
+.reset-button {
+    margin-right: 5px;
+    border-radius: 20px;
     background: white;
+    color:rgb(227, 2, 2);
+    border: none;
+    padding: 0.2rem 0.5rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-} */
+    font-size: 1rem;
+}
 
-/* form button:hover {
-    color: white;
-    background: #d88771;
-} */
+.reset-container label {
+    cursor: pointer;
+}
+
+
 
 
 .todo-container {
@@ -88,7 +137,7 @@ form input, form button {
     margin: 0.5rem;
     background: white;
     color: black;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -108,7 +157,7 @@ form input, form button {
     background: #d88771;
     color: white;
     border: none;
-    padding: 1.5rem;
+    padding: 1rem;
     cursor: pointer;
     font-size: 1rem;
 }
@@ -124,17 +173,46 @@ form input, form button {
 }
 
 .todo-item {
-    padding: 0rem 0.5rem;
+    padding: 1rem 0.3rem;
     /* display: flex;
     flex-wrap: nowrap; */
 }
 
 .fa-trash,
-.fa-check,
+.fa-mask, 
 .fa-question {
     pointer-events: none;
 }
 
+.modal-add {
+    color: #d88771;
+}
+
+.modal-attempt {
+    color: #94dc86
+}
+
+.modal-hint {
+    background:#e2c35d;
+    color: white
+}
+.modal-mask {
+    background: #94dc86;
+    color: white
+}
+
+.modal-remove {
+    background: #d88771;
+    color: white;
+}
+
+.modal-reset {
+    color: red
+}
+
+#showHideModal{
+    pointer-events: none;
+}
 
 .completed {
     text-decoration: line-through;
@@ -142,7 +220,7 @@ form input, form button {
 }
 
 .fall {
-    transition: 1s;
+    transition: 0.5s;
     transform: translateY(8rem) rotateZ(20deg);
     opacity: 0;
 }
@@ -199,14 +277,188 @@ select {
 }
 
 
-.showHide {
-    cursor: pointer;
-    padding: 10px;
-}
-
-.checkBox {
+.checkbox-reset-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 2px;
 }
+
+.checkBox {
+    margin-right: 25px;
+}
+
+.checkBox label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.checkBox label::before {
+    content: '';
+    width: 1em;
+    height: 1em;
+    border-radius: .25em;
+    margin-right: .5em;
+    border: .05em solid black;
+
+}
+
+.checkBox input[type='checkbox'] {
+    cursor: pointer;
+    opacity: 0;
+    position: absolute;
+}
+
+.checkBox label:hover::before,
+.checkBox input[type='checkbox']:hover + label::before{
+    background-color: #c8bfbd;
+}
+
+.checkBox input[type='checkbox']:focus + label::before{
+    box-shadow: 0 0 7px black;
+}
+
+.checkBox input[type='checkbox']:checked + label::before {
+    content: '\002714';
+    background-color: #d88771;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+}
+
+
+
+/* #showHide {
+    padding: 10px;
+} */
+ 
+/* .checkBoxLabel,
+#showHide {
+    cursor: pointer;
+}
+
+.checkBoxLabel {
+    margin-right: 25px;
+} */
+.howToDiv {
+    margin-top: 2rem;
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-evenly;
+}
+
+.howToDiv button {
+    border-radius: 10px;
+    /* background-color: #e5e5f7; */
+    padding: 0px 0.2em;
+    cursor: pointer;
+    color: #396dd4;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+
+
+.howToDiv input {
+    pointer-events: none;
+}
+.howToDiv .modal-input {
+    pointer-events: none;
+}
+
+
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 200ms ease-in-out;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 10;
+    background-color: #93cdb5;
+    width: 500px;
+    max-width: 80%;
+}
+
+.modal.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.modal-header .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: black
+}
+
+.modal-header .close-button {
+    cursor: pointer;
+    border: 2px solid black;
+    background-color: rgb(209, 219, 216);
+    color: black;
+    border-radius: 50%;
+    outline: none;
+    /* background: none; */
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.modal-body {
+    padding: 10px 15px;
+    max-height: 500px;
+    overflow-y: auto;
+    color: black
+}
+
+.modal-body span{
+    text-align: center;
+}
+
+#overlay {
+    position: fixed;
+    opacity: 0;
+    transition: 200ms ease-in-out;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+#overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-input {
+    border-radius: 20px;
+    padding: 0.3rem;
+    font-size: 1rem;
+    border: none;
+    background: white
+}
+
+.modal-body button {
+    border-radius: 10px;
+    padding: 0.1rem;
+    padding-left: 2px;
+    padding-right: 2px;
+    border: solid grey
+}
+
