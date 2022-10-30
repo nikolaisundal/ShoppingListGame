@@ -90,6 +90,9 @@ function showHide() {
     for (let i = 0; i <= ul.length - 1; i++) {
         ul[i].parentElement.remove()
     }
+    todoArray.forEach((todo) => {
+        todo.exception = false;
+    })
     todoArray.forEach(function (todo) {
         console.log("hei")
         const todoDiv = document.createElement("div");
@@ -200,7 +203,8 @@ function addTodo(event) {
     //push to array
     const todoItem = {
         item: todoInput.value,
-        count: 0
+        count: 0,
+        exception: false
     }
     saveLocalTodos(todoItem);
     //Todo div
@@ -270,9 +274,73 @@ function deleteCheck(e){
     }
     // Check mark
     if (item.classList[0] === "complete-btn") {
-        secretInnerChild = todo.children[0].children[1]; 
-        shownInnerChild = todo.children[0].children[0]; 
-        secretInnerChild.classList.toggle("secret");
+        const secretInnerChild = todo.children[0].children[1].innerText; 
+        const shownInnerChild = todo.children[0].children[0].innerText;
+        const concat = shownInnerChild.concat(secretInnerChild);
+        todoArray.forEach((todo) => {
+            if (todo.item === concat && todo.exception === false) {
+                todo.exception = true;
+            } else if (todo.item === concat && todo.exception === true)
+                todo.exception = false;
+        })
+        const ul = document.querySelectorAll('ul li');
+        for (let i = 0; i <= ul.length - 1; i++) {
+            ul[i].parentElement.remove()
+        }
+        todoArray.forEach(function (todo) {
+            const todoDiv = document.createElement("div");
+            todoDiv.classList.add('todo');
+            const newTodo = document.createElement('li');
+            const shownSpan = document.createElement('span');
+            shownSpan.classList.add('shown')
+            const hiddenSpan = document.createElement('span');
+            hiddenSpan.classList.add('secret')
+            newTodo.classList.add('todo-item');
+            if (checkBox.checked) {
+                if (todo.exception === true) {
+                    shownSpan.innerText = todo.item
+                    newTodo.appendChild(shownSpan); 
+                    newTodo.appendChild(hiddenSpan);
+                    todoDiv.appendChild(newTodo);
+                } else {
+                shownSpan.innerText = todo.item.substring(0, todo.count);
+                newTodo.appendChild(shownSpan); 
+                hiddenSpan.innerText = todo.item.substring(todo.count)
+                newTodo.appendChild(hiddenSpan);
+                todoDiv.appendChild(newTodo);
+                }
+            } else {
+                if (todo.exception === true) {
+                    shownSpan.innerText = todo.item.substring(0, todo.count);
+                    newTodo.appendChild(shownSpan); 
+                    hiddenSpan.innerText = todo.item.substring(todo.count)
+                    newTodo.appendChild(hiddenSpan);
+                    todoDiv.appendChild(newTodo);
+                } else {
+                shownSpan.innerText = todo.item
+                newTodo.appendChild(shownSpan); 
+                newTodo.appendChild(hiddenSpan);
+                todoDiv.appendChild(newTodo);
+                }
+            }
+            //Check mark button
+            const completedButton = document.createElement('button');
+            completedButton.innerHTML = '<i class="fa-solid fa-mask"></i>';
+            completedButton.classList.add("complete-btn");
+            todoDiv.appendChild(completedButton);
+            //Trash button
+            const trashButton = document.createElement('button');
+            trashButton.innerHTML = '<i class="fas fa-trash"><i>';
+            trashButton.classList.add("trash-btn");
+            todoDiv.appendChild(trashButton);
+            //Hintbutton
+            const hintButton = document.createElement('button');
+            hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
+            hintButton.classList.add("hint-btn");
+            todoDiv.appendChild(hintButton);
+            //Append todoDiv to list
+            todoList.appendChild(todoDiv);
+        })
     }
     
     if (todoArray.length === 0 && checkBox.checked === true) {
@@ -297,17 +365,32 @@ function hint(e){
     const item = e.target;
     if (item.classList[0] === "hint-btn") {
         const todo = item.parentElement;
-        if(todo.getElementsByTagName('li')[0].classList[1] === "completed"){
+        /* if(todo.getElementsByTagName('li')[0].classList[1] === "completed"){
             console.log("hei")
             todo.getElementsByTagName('li')[0].classList.remove("completed")
-        }
+        } */
         const shownInnerChild = todo.getElementsByTagName('li')[0].children[0].innerText;
         const secretInnerChild = todo.getElementsByTagName('li')[0].children[1].innerText;
         const concat = shownInnerChild.concat(secretInnerChild);
+        /* todoArray.forEach((todo) => {
+            if (concat === todo.item) {
+                todo.count +=1;
+            }
+        }) */
+        /* const ul = document.querySelectorAll('ul li');
+        for (let i = 0; i <= ul.length - 1; i++) {
+            ul[i].parentElement.remove()
+        } */
+        
+          
         for (let i = 0; i < todoArray.length; i++) {
-            if (concat === todoArray[i].item)
-            /* if (concat.replaceAll(" ", "") === todoArray[i].item.replaceAll(" ", "")) */ {
+            if (concat === todoArray[i].item) {
                 todoArray[i].count += 1;
+                if(checkBox.checked) {
+                    todoArray[i].exception = false;
+                } else {
+                    todoArray[i].exception = true;
+                }
                 const shownText = `<span class="shown">${todoArray[i].item.substring(0, todoArray[i].count)}</span>`;
                 const hiddenText =`<span class="secret">${todoArray[i].item.substring(todoArray[i].count)}</span>`;
                 todo.getElementsByTagName('li')[0].innerHTML = shownText + hiddenText;
@@ -351,7 +434,6 @@ function getTodos() {
     todoArray.forEach(function (todo) {
         const todoDiv = document.createElement("div");
         todoDiv.classList.add('todo');
-        //Create li
         const newTodo = document.createElement('li');
         const shownSpan = document.createElement('span');
         shownSpan.classList.add('shown')
@@ -359,16 +441,31 @@ function getTodos() {
         hiddenSpan.classList.add('secret')
         newTodo.classList.add('todo-item');
         if (checkBox.checked) {
+            if (todo.exception === true) {
+                shownSpan.innerText = todo.item
+                newTodo.appendChild(shownSpan); 
+                newTodo.appendChild(hiddenSpan);
+                todoDiv.appendChild(newTodo);
+            } else {
             shownSpan.innerText = todo.item.substring(0, todo.count);
             newTodo.appendChild(shownSpan); 
             hiddenSpan.innerText = todo.item.substring(todo.count)
             newTodo.appendChild(hiddenSpan);
             todoDiv.appendChild(newTodo);
+            }
         } else {
+            if (todo.exception === true) {
+                shownSpan.innerText = todo.item.substring(0, todo.count);
+                newTodo.appendChild(shownSpan); 
+                hiddenSpan.innerText = todo.item.substring(todo.count)
+                newTodo.appendChild(hiddenSpan);
+                todoDiv.appendChild(newTodo);
+            } else {
             shownSpan.innerText = todo.item
             newTodo.appendChild(shownSpan); 
             newTodo.appendChild(hiddenSpan);
             todoDiv.appendChild(newTodo);
+            }
         }
         //Check mark button
         const completedButton = document.createElement('button');
@@ -390,3 +487,45 @@ function getTodos() {
     })
 }
 
+
+/* //gamle gettodos(sansynsligvis slett senere)
+todoArray.forEach(function (todo) {
+    const todoDiv = document.createElement("div");
+    todoDiv.classList.add('todo');
+    //Create li
+    const newTodo = document.createElement('li');
+    const shownSpan = document.createElement('span');
+    shownSpan.classList.add('shown')
+    const hiddenSpan = document.createElement('span');
+    hiddenSpan.classList.add('secret')
+    newTodo.classList.add('todo-item');
+    if (checkBox.checked) {
+        shownSpan.innerText = todo.item.substring(0, todo.count);
+        newTodo.appendChild(shownSpan); 
+        hiddenSpan.innerText = todo.item.substring(todo.count)
+        newTodo.appendChild(hiddenSpan);
+        todoDiv.appendChild(newTodo);
+    } else {
+        shownSpan.innerText = todo.item
+        newTodo.appendChild(shownSpan); 
+        newTodo.appendChild(hiddenSpan);
+        todoDiv.appendChild(newTodo);
+    }
+    //Check mark button
+    const completedButton = document.createElement('button');
+    completedButton.innerHTML = '<i class="fa-solid fa-mask"></i>';
+    completedButton.classList.add("complete-btn");
+    todoDiv.appendChild(completedButton);
+    //Trash button
+    const trashButton = document.createElement('button');
+    trashButton.innerHTML = '<i class="fas fa-trash"><i>';
+    trashButton.classList.add("trash-btn");
+    todoDiv.appendChild(trashButton);
+    //Hintbutton
+    const hintButton = document.createElement('button');
+    hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
+    hintButton.classList.add("hint-btn");
+    todoDiv.appendChild(hintButton);
+    //Append todoDiv to list
+    todoList.appendChild(todoDiv);
+}) */

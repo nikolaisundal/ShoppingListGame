@@ -12,13 +12,14 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+<div class="topDiv">
     <div class="howToDiv">
         <button data-modal-target="#modal" class="how-to-button"><p>How to Play</p></button>
     </div>
     <div class="modal" id="modal">
        <div class="modal-header">
             <div class="title">Welcome to my fun, fun game which I have created.. this is how you play!</div>
-            <button data-close-button class="close-button">&times;</button> 
+       <div class="kakk"><button data-close-button class="close-button">&times;</button></div>
        </div> 
        <div class="modal-body">
             <p>1. Add groceries to the input "<input class="modal-input" disabled type="text" placeholder="Add an item.." readonly>",
@@ -47,6 +48,7 @@
     <header class="howToButton">
         <h1>Grocery List Memory Game</h1>
     </header>
+</div>
     <div class="form-container">  
         <form>
             <input type="text" class="todo-input" placeholder="Add an item..">
@@ -76,11 +78,11 @@
     </div>
     <footer>
         
-        <div class="howToDiv">
+      <!--   <div class="howToDiv">
             <button data-modal-target="#modal" class="how-to-button">How to Play</button>
             <button data-modal-target="#modal" class="how-to-button">How to Play</button>
             <button data-modal-target="#modal" class="how-to-button">How to Play</button>
-        </div>
+        </div> -->
     </footer>
     <script src="./app.js"></script>
 </body>
