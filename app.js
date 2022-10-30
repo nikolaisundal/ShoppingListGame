@@ -11,6 +11,9 @@ const resetButton = document.querySelector('.reset-button')
 const openModalButtons = document.querySelectorAll('[data-modal-target]')
 const closeModalButtons = document.querySelectorAll('[data-close-button]')
 const overlay = document.getElementById('overlay')
+const formContainer = document.querySelector('.form-container')
+const formElement = document.querySelector('.form')
+
 
 //array
 
@@ -44,14 +47,19 @@ closeModalButtons.forEach(button => {
 
 function openModal(modal) {
     if (modal == null) return;
-    modal.classList.add('active')
-    overlay.classList.add('active')
+    modal.classList.add('active');
+    overlay.classList.add('active');
 }
+
+overlay.addEventListener("transitionrun", function(){
+    formContainer.classList.toggle('active');
+})
 
 function closeModal(modal) {
     if (modal == null) return;
-    modal.classList.remove('active')
-    overlay.classList.remove('active')
+    modal.classList.remove('active');
+    overlay.classList.remove('active');
+    
 }
 
 overlay.addEventListener('click', () => {
@@ -94,7 +102,6 @@ function showHide() {
         todo.exception = false;
     })
     todoArray.forEach(function (todo) {
-        console.log("hei")
         const todoDiv = document.createElement("div");
         todoDiv.classList.add('todo');
         //Create li

@@ -42,13 +42,14 @@ header/* , form */ {
     min-height: 6vh;
     
     padding: 0rem 0.5rem;
-    /* border-radius: 200px; */
     min-width: 100%;
     background: rgba(244, 246, 246, 0.2);
     margin-bottom: 10px;
     border-radius: 0rem 0rem 1rem 1rem;
     
 }
+
+
 .topDiv {
     background: rgba(244, 246, 246, 0.2);
     padding-top: 5px;
@@ -64,9 +65,15 @@ header/* , form */ {
     position: -ms-sticky;
     position: -o-sticky;
     top: 0;
-    z-index: 0;
+    
 }
 
+.form-container.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+}
 
 
 
@@ -177,14 +184,22 @@ form input, form button {
 
 .todo-item {
     padding: 1rem 0.3rem;
-    /* display: flex;
-    flex-wrap: nowrap; */
 }
 
 .fa-trash,
 .fa-mask, 
 .fa-question {
     pointer-events: none;
+}
+.modal-add .fa-plus-square,
+.modal-attempt .fa-arrow-right,
+.modal-hint .fa-question,
+.modal-mask .fa-mask,
+.modal-remove .fa-trash-can,
+.modal-reset .fa-circle-minus{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-add {
@@ -268,10 +283,6 @@ select {
 .select:hover::after {
     background: white;
     color:#d88771
-}
-
-.counter {
-    display: none;
 }
 
 .secret {
@@ -368,6 +379,7 @@ select {
 .howToDiv input {
     pointer-events: none;
 }
+
 .howToDiv .modal-input {
     pointer-events: none;
 }
@@ -393,6 +405,7 @@ select {
 }
 
 .modal-header {
+    position: relative;
     padding: 10px 10px;
     display: flex;
     justify-content: space-between;
@@ -401,6 +414,7 @@ select {
 }
 
 .modal-header .title {
+    margin-right: 1.4em;
     font-size: 1.25rem;
     font-weight: bold;
     color: black
@@ -421,6 +435,13 @@ select {
     padding-left: 5px;
     padding-right: 5px;
 }
+.close-button-div {
+    position:absolute;
+    top:0.5em;
+    right:0.3em;
+    min-width: 30px;
+}
+   
 
 .modal-body {
     padding: 10px 15px;
@@ -459,10 +480,8 @@ select {
 }
 
 .modal-body button {
-    border-radius: 10px;
-    padding: 0.1rem;
-    padding-left: 2px;
-    padding-right: 2px;
+    border-radius: 0.7rem;
+    padding:0.3rem;
     border: solid grey
 }
 
