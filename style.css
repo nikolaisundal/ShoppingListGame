@@ -358,8 +358,8 @@ select {
 } */
 .howToDiv {
     display: flex;
-    /* align-items: center; */
-    justify-content: space-evenly;
+    align-items: left;
+    margin-left:10px;
 }
 
 .howToDiv button {
@@ -484,4 +484,31 @@ select {
     padding:0.3rem;
     border: solid grey
 }
+
+.feedback-modal {
+    padding: 1em;
+    max-width: 50ch;
+    background: rgb(102, 225, 102);
+    left: 50%;
+    position: absolute;
+    top: 100%;
+    color: black;
+    transform: translate(-50%, 0.1rem);
+    border-radius: 10px;
+}
+
+.not-found,
+.already-exists {
+    padding: 1em;
+    max-width: 50ch;
+    background: rgb(235, 77, 77);
+    left: 50%;
+    position: absolute;
+    top: 100%;
+    color: black;
+    transform: translate(-50%, 0.1rem);
+    border-radius: 10px;
+    border: black 3px solid;
+}
+
 

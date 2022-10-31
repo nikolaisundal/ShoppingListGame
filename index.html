@@ -25,7 +25,7 @@
             <p>1. Add groceries to the input "<input class="modal-input" disabled type="text" placeholder="Add an item.." readonly>",
             press the add button "<button class="modal-add"> <i class="fas fa-plus-square"></i></button>" for each item. Your list will appear below. </p>
                 <br>
-            <p>2. Memorize the list to the best of your ability and press the show/hide all button 
+            <p>2. Memorize the list to the best of your ability and press the show/hide all checkbox 
                 "<input type="checkbox" id="showHideModal" name="showHideModal">".</p>
                 <br>    
             <p>3. Go to your supermarket of choice and find a couple of items, enter them in the input again,
@@ -59,6 +59,10 @@
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
         </form>
+            <dialog class="feedback-modal">
+            </dialog>
+            <dialog class="not-found">The item was not found in the list!</dialog>
+            <dialog class="already-exists">This item already exists!</dialog>
     </div>
     <div class="checkbox-reset-container">
         <div class="checkBox">

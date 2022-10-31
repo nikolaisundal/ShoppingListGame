@@ -13,11 +13,27 @@ const closeModalButtons = document.querySelectorAll('[data-close-button]')
 const overlay = document.getElementById('overlay')
 const formContainer = document.querySelector('.form-container')
 const formElement = document.querySelector('.form')
-
+const feedbackModal = document.querySelector('.feedback-modal')
+const alreadyExists = document.querySelector('.already-exists')
+const notFound = document.querySelector('.not-found')
 
 //array
 
-/* const todoArray = []; */
+
+const feedbackArray = [
+    "CongratuWellDone!",
+    "Mastermind!",
+    "Allright, calm down nerd..",
+    "Well played!",
+    "Good job!",
+    "Good boy/girl/other!",
+    "Clever clogs ;)",
+    "I'm amazed!",
+    "Are you a rocket surgeon?",
+    "I'm impressed..",
+    "You're too good at this!",
+    "Well done, you!"
+]
 
 //Event Listeners
 document.addEventListener('DOMContentLoaded', getTodos)
@@ -30,6 +46,32 @@ checkBox.addEventListener('change', showHide);
 resetButton.addEventListener('click', reset);
 
 //Functions
+
+const triggerAlreadyExists = () => {
+    alreadyExists.show()
+    setTimeout(() => {
+        alreadyExists.close();
+    }, 1500)
+}
+
+const triggerNotFound = () => {
+    notFound.show()
+    setTimeout(() => {
+        notFound.close();
+    }, 1500)
+}
+
+const triggerFeedbackModal = () => {
+    const getRandomInt = Math.floor(Math.random()*12)
+    const feedbackText = document.createElement('p')
+    feedbackText.innerText = feedbackArray[getRandomInt]
+    feedbackModal.appendChild(feedbackText)
+    feedbackModal.show()
+    setTimeout(() => {
+        feedbackModal.close();
+        feedbackModal.removeChild(feedbackText)
+    }, 1200)
+}
 
 openModalButtons.forEach(button => {
     button.addEventListener('click', () =>{
@@ -154,6 +196,7 @@ function attempt(event) {
     } else {
         todoArray = JSON.parse(localStorage.getItem('todoArray'))
     }
+    let found = false;
     for (let i = 0; i < todoArray.length; i++) {
         if (todoInput.value.toLowerCase() === todoArray[i].item.toLowerCase()) {
             const items = todoList.getElementsByTagName("li");
@@ -174,10 +217,15 @@ function attempt(event) {
                     count: todoArray[i].item.length};
                     todoArray.splice(i ,1);
                     todoArray.unshift(itemToMove);
-                    alert("CongratuWellDone!")
+                    triggerFeedbackModal();
+                    found = true;
+                    break;
                 } 
             }
-        } 
+        }
+    } 
+    if (found === false) {
+        triggerNotFound();
     }  
     localStorage.setItem('todoArray', JSON.stringify(todoArray));
     todoInput.value = "";
@@ -197,15 +245,15 @@ function addTodo(event) {
     } else {
         todoArray = JSON.parse(localStorage.getItem('todoArray'))
     }
-    let alreadyExists
+    let found
     todoArray.forEach(function(todo) {
         if (todo.item.toLowerCase() === todoInput.value.toLowerCase()) {
-            alert("item already exists!"); 
-            alreadyExists = true
+            found= true
         }
     })
-    if (alreadyExists === true) {
-        return;
+    if (found === true) {
+        triggerAlreadyExists();
+        return; 
     }
     //push to array
     const todoItem = {
