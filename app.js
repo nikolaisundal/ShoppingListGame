@@ -7,19 +7,17 @@ const attemptButton = document.querySelector('.attempt-button');
 const todoList = document.querySelector('.todo-list');
 const filterOption = document.querySelector(".filter-todo");
 const li = document.getElementsByTagName('li');
-const resetButton = document.querySelector('.reset-button')
-const openModalButtons = document.querySelectorAll('[data-modal-target]')
-const closeModalButtons = document.querySelectorAll('[data-close-button]')
-const overlay = document.getElementById('overlay')
-const formContainer = document.querySelector('.form-container')
-const formElement = document.querySelector('.form')
-const feedbackModal = document.querySelector('.feedback-modal')
-const alreadyExists = document.querySelector('.already-exists')
-const notFound = document.querySelector('.not-found')
+const resetButton = document.querySelector('.reset-button');
+const openModalButtons = document.querySelectorAll('[data-modal-target]');
+const closeModalButtons = document.querySelectorAll('[data-close-button]');
+const overlay = document.getElementById('overlay');
+const formContainer = document.querySelector('.form-container');
+const formElement = document.querySelector('.form');
+const feedbackModal = document.querySelector('.feedback-modal');
+const alreadyExists = document.querySelector('.already-exists');
+const notFound = document.querySelector('.not-found');
 
 //array
-
-
 const feedbackArray = [
     "CongratuWellDone!",
     "Mastermind!",
@@ -40,7 +38,6 @@ document.addEventListener('DOMContentLoaded', getTodos)
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener("click", deleteCheck);
 todoList.addEventListener("click", hint);
-/* filterOption.addEventListener("click", filterTodo); */
 attemptButton.addEventListener('click', attempt);
 checkBox.addEventListener('change', showHide);
 resetButton.addEventListener('click', reset);
@@ -48,42 +45,42 @@ resetButton.addEventListener('click', reset);
 //Functions
 
 const triggerAlreadyExists = () => {
-    alreadyExists.show()
+    alreadyExists.show();
     setTimeout(() => {
         alreadyExists.close();
     }, 1500)
 }
 
 const triggerNotFound = () => {
-    notFound.show()
+    notFound.show();
     setTimeout(() => {
         notFound.close();
     }, 1500)
 }
 
 const triggerFeedbackModal = () => {
-    const getRandomInt = Math.floor(Math.random()*12)
-    const feedbackText = document.createElement('p')
-    feedbackText.innerText = feedbackArray[getRandomInt]
-    feedbackModal.appendChild(feedbackText)
-    feedbackModal.show()
+    const getRandomInt = Math.floor(Math.random()*12);
+    const feedbackText = document.createElement('p');
+    feedbackText.innerText = feedbackArray[getRandomInt];
+    feedbackModal.appendChild(feedbackText);
+    feedbackModal.show();
     setTimeout(() => {
         feedbackModal.close();
-        feedbackModal.removeChild(feedbackText)
-    }, 1200)
+        feedbackModal.removeChild(feedbackText);
+    }, 1500)
 }
 
 openModalButtons.forEach(button => {
     button.addEventListener('click', () =>{
         const modal = document.querySelector(button.dataset.modalTarget)
-        openModal(modal)
+        openModal(modal);
     } )
 })
 
 closeModalButtons.forEach(button => {
     button.addEventListener('click', () =>{
         const modal = button.closest('.modal')
-        closeModal(modal)
+        closeModal(modal);
     } )
 })
 
@@ -107,14 +104,14 @@ function closeModal(modal) {
 overlay.addEventListener('click', () => {
     const modals = document.querySelectorAll('.modal.active')
     modals.forEach(modal => {
-        closeModal(modal)
+        closeModal(modal);
     })
 })
 
 function reset() {
     const ul = document.querySelectorAll('ul li');
     for (let i = 0; i < ul.length; i++) {
-        ul[i].parentElement.remove()
+        ul[i].parentElement.remove();
     }
     localStorage.removeItem('todoArray')
     if (checkBox.checked === true) {
@@ -126,19 +123,13 @@ function reset() {
 
 
 function showHide() {
-    let todoArray;
-    if(localStorage.getItem('todoArray') === null) {
-        todoArray = [];
-    } else {
-        todoArray = JSON.parse(localStorage.getItem('todoArray'))
-    }
+    const todoArray = getLocalArray();
     const ul = document.querySelectorAll('ul li');
-    //Wow..
     if (ul.length === 0 || checkBox.checked) {
-        localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
+        localStorage.setItem("checkbox", JSON.stringify(checkBox.checked));
     }
     for (let i = 0; i <= ul.length - 1; i++) {
-        ul[i].parentElement.remove()
+        ul[i].parentElement.remove();
     }
     todoArray.forEach((todo) => {
         todo.exception = false;
@@ -146,7 +137,6 @@ function showHide() {
     todoArray.forEach(function (todo) {
         const todoDiv = document.createElement("div");
         todoDiv.classList.add('todo');
-        //Create li
         const newTodo = document.createElement('li');
         const shownSpan = document.createElement('span');
         shownSpan.classList.add('shown');
@@ -161,28 +151,24 @@ function showHide() {
             newTodo.appendChild(hiddenSpan);
             todoDiv.appendChild(newTodo);
         } else {
-            /* localStorage.removeItem("checkbox"); */localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
+            localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
             shownSpan.innerText = todo.item;
             newTodo.appendChild(shownSpan); 
             newTodo.appendChild(hiddenSpan);
             todoDiv.appendChild(newTodo);
         }
-        //Check mark button
         const completedButton = document.createElement('button');
         completedButton.innerHTML = '<i class="fa-solid fa-mask"></i>'; 
         completedButton.classList.add("complete-btn");
         todoDiv.appendChild(completedButton);
-        //Trash button
         const trashButton = document.createElement('button');
         trashButton.innerHTML = '<i class="fas fa-trash"><i>';
         trashButton.classList.add("trash-btn");
         todoDiv.appendChild(trashButton);
-        //Hintbutton
         const hintButton = document.createElement('button');
         hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
         hintButton.classList.add("hint-btn");
         todoDiv.appendChild(hintButton);
-        //Append todoDiv to list
         todoList.appendChild(todoDiv);
     })
     localStorage.setItem('todoArray', JSON.stringify(todoArray));
@@ -190,12 +176,7 @@ function showHide() {
         
 function attempt(event) {
     event.preventDefault();
-    let todoArray;
-    if(localStorage.getItem('todoArray') === null) {
-        todoArray = [];
-    } else {
-        todoArray = JSON.parse(localStorage.getItem('todoArray'))
-    }
+    const todoArray = getLocalArray();
     let found = false;
     for (let i = 0; i < todoArray.length; i++) {
         if (todoInput.value.toLowerCase() === todoArray[i].item.toLowerCase()) {
@@ -233,22 +214,14 @@ function attempt(event) {
 
 
 
-
-
-//funker ikke med arrow function her;]
 function addTodo(event) {
     //Prevent form from submitting
     event.preventDefault();
-    let todoArray;
-    if(localStorage.getItem('todoArray') === null) {
-        todoArray = [];
-    } else {
-        todoArray = JSON.parse(localStorage.getItem('todoArray'))
-    }
-    let found
+    const todoArray = getLocalArray();
+    let found;
     todoArray.forEach(function(todo) {
         if (todo.item.toLowerCase() === todoInput.value.toLowerCase()) {
-            found= true
+            found= true;
         }
     })
     if (found === true) {
@@ -298,13 +271,7 @@ function addTodo(event) {
     }
     
 function deleteCheck(e){
-    /* let checkBoxCheck = JSON.parse(localStorage.getItem("checkbox")); */
-    let todoArray;
-    if(localStorage.getItem('todoArray') === null) {
-        todoArray = [];
-    } else {
-        todoArray = JSON.parse(localStorage.getItem('todoArray'))
-    }
+    const todoArray = getLocalArray();
     const item = e.target;
     const todo = item.parentElement;
     //delete todo
@@ -313,16 +280,13 @@ function deleteCheck(e){
         const shownInnerChild = todo.getElementsByTagName('li')[0].children[0].innerText;
         const secretInnerChild = todo.getElementsByTagName('li')[0].children[1].innerText;
         const concat = shownInnerChild.concat(secretInnerChild);
-
         for (let i = 0; i < todoArray.length; i++) {
             if (concat.replaceAll(" ", "") === todoArray[i].item.replaceAll(" ", "")) { 
                 todoArray.splice(i, 1);
             }
         }
         //Animation
-        todo.classList.add("fall");
-        //remove from local storage
-        
+        todo.classList.add("fall"); 
         todo.addEventListener("transitionend", function(){
             todo.remove();
         })
@@ -378,28 +342,23 @@ function deleteCheck(e){
                 todoDiv.appendChild(newTodo);
                 }
             }
-            //Check mark button
             const completedButton = document.createElement('button');
             completedButton.innerHTML = '<i class="fa-solid fa-mask"></i>';
             completedButton.classList.add("complete-btn");
             todoDiv.appendChild(completedButton);
-            //Trash button
             const trashButton = document.createElement('button');
             trashButton.innerHTML = '<i class="fas fa-trash"><i>';
             trashButton.classList.add("trash-btn");
             todoDiv.appendChild(trashButton);
-            //Hintbutton
             const hintButton = document.createElement('button');
             hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
             hintButton.classList.add("hint-btn");
             todoDiv.appendChild(hintButton);
-            //Append todoDiv to list
             todoList.appendChild(todoDiv);
         })
     }
     
     if (todoArray.length === 0 && checkBox.checked === true) {
-        /* localStorage.removeItem("checkbox"); */
         checkBox.checked = false
         localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
     }
@@ -411,33 +370,13 @@ function deleteCheck(e){
 
 
 function hint(e){
-    let todoArray;
-    if(localStorage.getItem('todoArray') === null) {
-        todoArray = [];
-    } else {
-        todoArray = JSON.parse(localStorage.getItem('todoArray'))
-    }
+    const todoArray = getLocalArray();
     const item = e.target;
     if (item.classList[0] === "hint-btn") {
         const todo = item.parentElement;
-        /* if(todo.getElementsByTagName('li')[0].classList[1] === "completed"){
-            console.log("hei")
-            todo.getElementsByTagName('li')[0].classList.remove("completed")
-        } */
         const shownInnerChild = todo.getElementsByTagName('li')[0].children[0].innerText;
         const secretInnerChild = todo.getElementsByTagName('li')[0].children[1].innerText;
-        const concat = shownInnerChild.concat(secretInnerChild);
-        /* todoArray.forEach((todo) => {
-            if (concat === todo.item) {
-                todo.count +=1;
-            }
-        }) */
-        /* const ul = document.querySelectorAll('ul li');
-        for (let i = 0; i <= ul.length - 1; i++) {
-            ul[i].parentElement.remove()
-        } */
-        
-          
+        const concat = shownInnerChild.concat(secretInnerChild);  
         for (let i = 0; i < todoArray.length; i++) {
             if (concat === todoArray[i].item) {
                 todoArray[i].count += 1;
@@ -456,21 +395,10 @@ function hint(e){
 } 
 
 
-/* function filterTodo(e) {
-    const todos= todoList.childNodes;
-    
-}
-
- */
 
 function saveLocalTodos(todo) {
     //check if there already is something in local storage.
-    let todoArray;
-    if(localStorage.getItem('todoArray') === null) {
-        todoArray = [];
-    } else {
-        todoArray = JSON.parse(localStorage.getItem('todoArray'))
-    }
+    const todoArray = getLocalArray();
     todoArray.push(todo)
     localStorage.setItem('todoArray', JSON.stringify(todoArray))
 }
@@ -480,11 +408,7 @@ function getTodos() {
     if (checkBoxCheck === true) {
         checkBox.checked = true;
     }
-    if(localStorage.getItem('todoArray') === null) {
-        todoArray = [];
-    } else {
-        todoArray = JSON.parse(localStorage.getItem('todoArray'))
-    }
+    const todoArray = getLocalArray();
     //todo parameter = item in todoArray
     todoArray.forEach(function (todo) {
         const todoDiv = document.createElement("div");
@@ -522,65 +446,26 @@ function getTodos() {
             todoDiv.appendChild(newTodo);
             }
         }
-        //Check mark button
         const completedButton = document.createElement('button');
         completedButton.innerHTML = '<i class="fa-solid fa-mask"></i>';
         completedButton.classList.add("complete-btn");
         todoDiv.appendChild(completedButton);
-        //Trash button
         const trashButton = document.createElement('button');
         trashButton.innerHTML = '<i class="fas fa-trash"><i>';
         trashButton.classList.add("trash-btn");
         todoDiv.appendChild(trashButton);
-        //Hintbutton
         const hintButton = document.createElement('button');
         hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
         hintButton.classList.add("hint-btn");
         todoDiv.appendChild(hintButton);
-        //Append todoDiv to list
         todoList.appendChild(todoDiv);
     })
 }
 
-
-/* //gamle gettodos(sansynsligvis slett senere)
-todoArray.forEach(function (todo) {
-    const todoDiv = document.createElement("div");
-    todoDiv.classList.add('todo');
-    //Create li
-    const newTodo = document.createElement('li');
-    const shownSpan = document.createElement('span');
-    shownSpan.classList.add('shown')
-    const hiddenSpan = document.createElement('span');
-    hiddenSpan.classList.add('secret')
-    newTodo.classList.add('todo-item');
-    if (checkBox.checked) {
-        shownSpan.innerText = todo.item.substring(0, todo.count);
-        newTodo.appendChild(shownSpan); 
-        hiddenSpan.innerText = todo.item.substring(todo.count)
-        newTodo.appendChild(hiddenSpan);
-        todoDiv.appendChild(newTodo);
+function getLocalArray () {
+    if(localStorage.getItem('todoArray') === null) {
+        return [];
     } else {
-        shownSpan.innerText = todo.item
-        newTodo.appendChild(shownSpan); 
-        newTodo.appendChild(hiddenSpan);
-        todoDiv.appendChild(newTodo);
+        return JSON.parse(localStorage.getItem('todoArray'))
     }
-    //Check mark button
-    const completedButton = document.createElement('button');
-    completedButton.innerHTML = '<i class="fa-solid fa-mask"></i>';
-    completedButton.classList.add("complete-btn");
-    todoDiv.appendChild(completedButton);
-    //Trash button
-    const trashButton = document.createElement('button');
-    trashButton.innerHTML = '<i class="fas fa-trash"><i>';
-    trashButton.classList.add("trash-btn");
-    todoDiv.appendChild(trashButton);
-    //Hintbutton
-    const hintButton = document.createElement('button');
-    hintButton.innerHTML = '<i class="fa-regular fa-question"></i>';
-    hintButton.classList.add("hint-btn");
-    todoDiv.appendChild(hintButton);
-    //Append todoDiv to list
-    todoList.appendChild(todoDiv);
-}) */
+}

@@ -19,7 +19,9 @@ body {
 
 h1 {
     padding: 10px;
-    color: black
+    color: black;
+    text-align:center; 
+    vertical-align: middle;
 }
 
 header {
@@ -183,7 +185,7 @@ form input, form button {
 }
 
 .todo-item {
-    padding: 1rem 0.3rem;
+    padding: 0.6rem 0.3rem;
 }
 
 .fa-trash,
@@ -197,9 +199,11 @@ form input, form button {
 .modal-mask .fa-mask,
 .modal-remove .fa-trash-can,
 .modal-reset .fa-circle-minus{
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
+    text-align: center;
+    vertical-align: center;
 }
 
 .modal-add {
@@ -480,13 +484,12 @@ select {
 }
 
 .modal-body button {
-    border-radius: 0.7rem;
-    padding:0.3rem;
+    border-radius: 20px;
+    padding:0.2rem 0.3rem;
     border: solid grey
 }
 
 .feedback-modal {
-    padding: 1em;
     max-width: 50ch;
     background: rgb(102, 225, 102);
     left: 50%;
@@ -497,9 +500,16 @@ select {
     border-radius: 10px;
 }
 
+.feedback-modal p{
+    padding: 0.2em;
+    text-align:center; 
+    vertical-align: middle;
+    
+
+}
+
 .not-found,
 .already-exists {
-    padding: 1em;
     max-width: 50ch;
     background: rgb(235, 77, 77);
     left: 50%;
@@ -511,4 +521,10 @@ select {
     border: black 3px solid;
 }
 
+.not-found,
+.already-exists p{
+    padding: 0.2em;
+    text-align:center; 
+    vertical-align: middle;
+}
 
