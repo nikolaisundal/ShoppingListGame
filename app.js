@@ -41,10 +41,6 @@ resetButton.addEventListener('click', reset);
 
 //Functions
 
-/* todo.classList.add("fall"); 
-        todo.addEventListener("transitionend", function(){
-            todo.remove();
-        }) */
 
 
 const changeMode = () => {
@@ -63,10 +59,10 @@ const changeMode = () => {
             attemptButton.classList.add("attempt-flip");
             attemptButton.addEventListener('click', attempt);
             attemptButton.addEventListener("animationend", function(){
-                attemptButton.classList.remove("attempt-flip")
-            })})
+            attemptButton.classList.remove("attempt-flip")
+            })
+        })
         } else {
-
             const attemptButton = document.createElement('button');
             attemptButton.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
             attemptButton.classList.add("attempt-button");
@@ -74,30 +70,24 @@ const changeMode = () => {
             formElement.appendChild(attemptButton);
             attemptButton.addEventListener('click', attempt);
         }
-        }
-        
-        
-     
-        else {
-        
+    } else {  
         const attemptButton = document.querySelector('.attempt-button');
-        if (attemptButton) {
-            /* attemptButton.removeEventListener('click', attempt);
-            attemptButton.remove(); */
-            attemptButton.classList.add("attempt-flip");
-            attemptButton.addEventListener("animationend", function(){
-            attemptButton.removeEventListener('click', attempt);
-            attemptButton.remove();
-            const todoButton = document.createElement('button');
-            todoButton.innerHTML = '<i class="fas fa-plus-square"></i>';
-            todoButton.classList.add("todo-button");
-            todoButton.setAttribute("type", "submit");
-            formElement.appendChild(todoButton);
-            todoButton.classList.add("add-flip");
-            todoButton.addEventListener('click', addTodo);
-            todoButton.addEventListener("animationend", function(){
+            if (attemptButton) {
+                attemptButton.classList.add("attempt-flip");
+                attemptButton.addEventListener("animationend", function(){
+                attemptButton.removeEventListener('click', attempt);
+                attemptButton.remove();
+                const todoButton = document.createElement('button');
+                todoButton.innerHTML = '<i class="fas fa-plus-square"></i>';
+                todoButton.classList.add("todo-button");
+                todoButton.setAttribute("type", "submit");
+                formElement.appendChild(todoButton);
+                todoButton.classList.add("add-flip");
+                todoButton.addEventListener('click', addTodo);
+                todoButton.addEventListener("animationend", function(){
                 todoButton.classList.remove("add-flip")
-            })})
+                })
+            })
         } else {
         const todoButton = document.createElement('button');
         todoButton.innerHTML = '<i class="fas fa-plus-square"></i>';
@@ -183,6 +173,24 @@ function reset() {
         localStorage.removeItem('checkbox')
         checkBox.checked = false;
     }
+    const attemptButton = document.querySelector('.attempt-button');
+    if (attemptButton) {
+        attemptButton.classList.add("attempt-flip");
+        attemptButton.addEventListener("animationend", function(){
+        attemptButton.removeEventListener('click', attempt);
+        attemptButton.remove();
+        const todoButton = document.createElement('button');
+        todoButton.innerHTML = '<i class="fas fa-plus-square"></i>';
+        todoButton.classList.add("todo-button");
+        todoButton.setAttribute("type", "submit");
+        formElement.appendChild(todoButton);
+        todoButton.classList.add("add-flip");
+        todoButton.addEventListener('click', addTodo);
+        todoButton.addEventListener("animationend", function(){
+        todoButton.classList.remove("add-flip")
+        })
+    })
+}
     todoInput.value = "";
 }
 
@@ -275,9 +283,11 @@ function attempt(event) {
     if (found === false) {
         triggerNotFound();
         todoInput.focus();
-    }  
+    } else {
+        todoInput.value = "";
+    }
     localStorage.setItem('todoArray', JSON.stringify(todoArray));
-    todoInput.value = "";
+    
 }
 
 
