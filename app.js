@@ -1,9 +1,7 @@
 
 //selectors
 const todoInput = document.querySelector('.todo-input');
-const todoButton = document.querySelector('.todo-button');
 const checkBox = document.querySelector('#showHide');
-const attemptButton = document.querySelector('.attempt-button');
 const todoList = document.querySelector('.todo-list');
 const filterOption = document.querySelector(".filter-todo");
 const li = document.getElementsByTagName('li');
@@ -12,10 +10,11 @@ const openModalButtons = document.querySelectorAll('[data-modal-target]');
 const closeModalButtons = document.querySelectorAll('[data-close-button]');
 const overlay = document.getElementById('overlay');
 const formContainer = document.querySelector('.form-container');
-const formElement = document.querySelector('.form');
+const formElement = document.forms[0]
 const feedbackModal = document.querySelector('.feedback-modal');
 const alreadyExists = document.querySelector('.already-exists');
 const notFound = document.querySelector('.not-found');
+
 
 //array
 const feedbackArray = [
@@ -35,14 +34,80 @@ const feedbackArray = [
 
 //Event Listeners
 document.addEventListener('DOMContentLoaded', getTodos)
-todoButton.addEventListener('click', addTodo);
 todoList.addEventListener("click", deleteCheck);
 todoList.addEventListener("click", hint);
-attemptButton.addEventListener('click', attempt);
 checkBox.addEventListener('change', showHide);
 resetButton.addEventListener('click', reset);
 
 //Functions
+
+/* todo.classList.add("fall"); 
+        todo.addEventListener("transitionend", function(){
+            todo.remove();
+        }) */
+
+
+const changeMode = () => {
+    if(checkBox.checked) {
+        const todoButton = document.querySelector('.todo-button');
+        if (todoButton) {
+            todoButton.classList.add("add-flip");
+            todoButton.addEventListener("animationend", function(){
+            todoButton.removeEventListener('click', addTodo);
+            todoButton.remove();
+            const attemptButton = document.createElement('button');
+            attemptButton.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+            attemptButton.classList.add("attempt-button");
+            attemptButton.setAttribute("type", "submit");
+            formElement.appendChild(attemptButton);
+            attemptButton.classList.add("attempt-flip");
+            attemptButton.addEventListener('click', attempt);
+            attemptButton.addEventListener("animationend", function(){
+                attemptButton.classList.remove("attempt-flip")
+            })})
+        } else {
+
+            const attemptButton = document.createElement('button');
+            attemptButton.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+            attemptButton.classList.add("attempt-button");
+            attemptButton.setAttribute("type", "submit");
+            formElement.appendChild(attemptButton);
+            attemptButton.addEventListener('click', attempt);
+        }
+        }
+        
+        
+     
+        else {
+        
+        const attemptButton = document.querySelector('.attempt-button');
+        if (attemptButton) {
+            /* attemptButton.removeEventListener('click', attempt);
+            attemptButton.remove(); */
+            attemptButton.classList.add("attempt-flip");
+            attemptButton.addEventListener("animationend", function(){
+            attemptButton.removeEventListener('click', attempt);
+            attemptButton.remove();
+            const todoButton = document.createElement('button');
+            todoButton.innerHTML = '<i class="fas fa-plus-square"></i>';
+            todoButton.classList.add("todo-button");
+            todoButton.setAttribute("type", "submit");
+            formElement.appendChild(todoButton);
+            todoButton.classList.add("add-flip");
+            todoButton.addEventListener('click', addTodo);
+            todoButton.addEventListener("animationend", function(){
+                todoButton.classList.remove("add-flip")
+            })})
+        } else {
+        const todoButton = document.createElement('button');
+        todoButton.innerHTML = '<i class="fas fa-plus-square"></i>';
+        todoButton.classList.add("todo-button");
+        todoButton.setAttribute("type", "submit");
+        formElement.appendChild(todoButton);
+        todoButton.addEventListener('click', addTodo);
+        }
+    }
+}
 
 const triggerAlreadyExists = () => {
     alreadyExists.show();
@@ -124,6 +189,7 @@ function reset() {
 
 function showHide() {
     const todoArray = getLocalArray();
+    changeMode();
     const ul = document.querySelectorAll('ul li');
     if (ul.length === 0 || checkBox.checked) {
         localStorage.setItem("checkbox", JSON.stringify(checkBox.checked));
@@ -199,6 +265,7 @@ function attempt(event) {
                     todoArray.splice(i ,1);
                     todoArray.unshift(itemToMove);
                     triggerFeedbackModal();
+                    todoInput.focus();
                     found = true;
                     break;
                 } 
@@ -207,6 +274,7 @@ function attempt(event) {
     } 
     if (found === false) {
         triggerNotFound();
+        todoInput.focus();
     }  
     localStorage.setItem('todoArray', JSON.stringify(todoArray));
     todoInput.value = "";
@@ -226,6 +294,7 @@ function addTodo(event) {
     })
     if (found === true) {
         triggerAlreadyExists();
+        todoInput.focus();
         return; 
     }
     //push to array
@@ -361,6 +430,7 @@ function deleteCheck(e){
     if (todoArray.length === 0 && checkBox.checked === true) {
         checkBox.checked = false
         localStorage.setItem("checkbox", JSON.stringify(checkBox.checked))
+        changeMode();
     }
     localStorage.setItem('todoArray', JSON.stringify(todoArray));
 }
@@ -408,6 +478,7 @@ function getTodos() {
     if (checkBoxCheck === true) {
         checkBox.checked = true;
     }
+    changeMode();
     const todoArray = getLocalArray();
     //todo parameter = item in todoArray
     todoArray.forEach(function (todo) {

@@ -16,6 +16,7 @@
     <div class="howToDiv">
         <button data-modal-target="#modal" class="how-to-button"><p>How to Play</p></button>
     </div>
+        <br>
     <div class="modal" id="modal">
        <div class="modal-header">
             <div class="title">Welcome to my fun, fun game which I have created.. this is how you play!</div>
@@ -25,11 +26,11 @@
             <p>1. Add groceries to the input "<input class="modal-input" disabled type="text" placeholder="Add an item.." readonly>",
             press the add button "<button class="modal-add"> <i class="fas fa-plus-square"></i></button>" for each item. Your list will appear below. </p>
                 <br>
-            <p>2. Memorize the list to the best of your ability and press the show/hide all checkbox 
-                "<input type="checkbox" id="showHideModal" name="showHideModal">".</p>
+            <p>2. Memorize the list to the best of your ability and press the game mode checkbox 
+                "<input type="checkbox" id="showHideModal" name="showHideModal">". Your items are now hidden.</p>
                 <br>    
-            <p>3. Go to your supermarket of choice and find a couple of items, enter them in the input again,
-                except this time press the attempt button "<button class="modal-attempt"><i class="fa-solid fa-arrow-right"></i></button>". The 
+            <p>3. When in game mode the add button is replaced with the attempt button "<button class="modal-attempt"><i class="fa-solid fa-arrow-right"></i></button>".
+                 Go to your supermarket of choice and find a couple of items, enter them in the input again and press the attempt button. The 
                found items will appear at the top of you list! Keep doing this until you have found all of your items.</p>
                <br>
             <p>4. If you have trouble remembering an item you can press the hint button 
@@ -51,13 +52,7 @@
 </div>
     <div class="form-container">  
         <form>
-            <input type="text" class="todo-input" placeholder="Add an item..">
-            <button class="todo-button" type ="submit">
-                <i class="fas fa-plus-square"></i>
-            </button>
-            <button class="attempt-button" type ="submit">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
+            <input type="text" class="todo-input" placeholder="Enter an item..">
         </form>
             <dialog class="feedback-modal"></dialog>
             <dialog class="not-found"><p>The item was not found in the list!</p></dialog>
@@ -66,7 +61,7 @@
     <div class="checkbox-reset-container">
         <div class="checkBox">
             <input type="checkbox" id="showHide" name="showHide" value="yes"> 
-            <label for="showHide" class="checkBoxLabel">Show/hide all </label>
+            <label for="showHide" class="checkBoxLabel"> Game mode </label>
         </div>
         
         <div class="reset-container">
