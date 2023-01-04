@@ -310,8 +310,8 @@ select {
 }
 
 .secret {
-    text-decoration: line-through;
-    text-decoration-thickness: 100%;
+    filter: blur(4px);
+    /* -webkit-filter: blur(1px); */
 }
 
 
